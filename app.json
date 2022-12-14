@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rn-mvp",
-    "slug": "snack-c8d0f743-58c3-45da-a61e-95b425571024",
+    "name": "strategy-in-motion-sandbox",
+    "slug": "snack-f7b7f8a8-e4b4-499d-bdad-ddcae4ffd236",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,7 +28,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "description": "private mvp\n"
+    }
   }
 }
