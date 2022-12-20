@@ -1,13 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-
-
-// or any pure javascript modules available in npm
 import { MD3LightTheme as DefaultTheme,Card, Button, Provider as PaperProvider } from 'react-native-paper';
-
 import { Accelerometer } from 'expo-sensors';
-
+import firebase from 'firebase';
 
 const theme = {  ...DefaultTheme,
   colors: {
@@ -17,14 +13,47 @@ const theme = {  ...DefaultTheme,
   },
 };
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDOnjC0vHckQhWhZOvMhrWvXRmTnSQY0Mc",
+  authDomain: "december-sandbox.firebaseapp.com",
+  databaseURL: "https://december-sandbox-default-rtdb.firebaseio.com",
+  projectId: "december-sandbox",
+  storageBucket: "december-sandbox.appspot.com",
+  messagingSenderId: "775531210491",
+  appId: "1:775531210491:web:fb15f28e7fb0a6545a325e",
+  measurementId: "G-JFNDGTGBX3"
+};
+
+
 export default function App() {
 
   const [accelerometerData, setAccelerometerData] = useState({ x: 0, y: 0, z: 0 });
   const [subscription, setSubscription] = useState(null);
+  const [database, setDatabase] = useState(null);
+  const [user, setUser] = useState(null);
+
+  Accelerometer.setUpdateInterval(1000);
+
+  if (!firebase.apps.length){
+    firebase.initializeApp(firebaseConfig);
+  }
+
+
+  firebase.auth().signInAnonymously().then((userCredential) => {
+    setUser(userCredential.user);
+    const fbDatabase = firebase.database();
+    setDatabase(fbDatabase);
+  })
+  .catch((error) => {
+  });
+
 
   subscribeToAccelerometer = () => {
     setSubscription(Accelerometer.addListener((accelerometerData) => {
       setAccelerometerData(accelerometerData);
+      if (database){
+        database.ref("testData/" + user.uid).push(accelerometerData);
+      }
     }));
 
   };
@@ -43,13 +72,9 @@ export default function App() {
         Use the button below to toggle accelerometer detection.
       </Text>
 
-  <Button icon="cellphone" mode="contained" onPress={ subscription ? unsubscribeFromAccelerometer : subscribeToAccelerometer }>
-    { subscription ? "Disable Detection" : "Enable Detection" }
-  </Button>
-
-
-
-
+      <Button icon="cellphone" mode="contained" onPress={ subscription ? unsubscribeFromAccelerometer : subscribeToAccelerometer }>
+        { subscription ? "Disable Detection" : "Enable Detection" }
+      </Button>
 
       <Card style={styles.card}>
 
