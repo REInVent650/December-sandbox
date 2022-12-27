@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
+import * as Device from 'expo-device';
 import { MD3LightTheme as DefaultTheme,Card, Button, Provider as PaperProvider } from 'react-native-paper';
 import { Accelerometer } from 'expo-sensors';
 import firebase from 'firebase';
+import { Firebase } from './config/firebase'
 
 const theme = {  ...DefaultTheme,
   colors: {
@@ -13,36 +15,33 @@ const theme = {  ...DefaultTheme,
   },
 };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDOnjC0vHckQhWhZOvMhrWvXRmTnSQY0Mc",
-  authDomain: "december-sandbox.firebaseapp.com",
-  databaseURL: "https://december-sandbox-default-rtdb.firebaseio.com",
-  projectId: "december-sandbox",
-  storageBucket: "december-sandbox.appspot.com",
-  messagingSenderId: "775531210491",
-  appId: "1:775531210491:web:fb15f28e7fb0a6545a325e",
-  measurementId: "G-JFNDGTGBX3"
-};
 
 
 export default function App() {
 
-  const [accelerometerData, setAccelerometerData] = useState({ x: 0, y: 0, z: 0 });
+  const [accelerometerData, setAccelerometerData] = useState({ x: 0, y: 0, z: 0, timestamp: 0 });
   const [subscription, setSubscription] = useState(null);
   const [database, setDatabase] = useState(null);
   const [user, setUser] = useState(null);
 
   Accelerometer.setUpdateInterval(1000);
 
-  if (!firebase.apps.length){
-    firebase.initializeApp(firebaseConfig);
-  }
 
 
   firebase.auth().signInAnonymously().then((userCredential) => {
     setUser(userCredential.user);
+
     const fbDatabase = firebase.database();
     setDatabase(fbDatabase);
+
+    if (database){
+      database.ref("testDataDevice/" + user.uid).push({osName: Device.osName, osVersion: Device.osVersion});
+    }
+
+
+    
+
+
   })
   .catch((error) => {
   });
@@ -50,8 +49,10 @@ export default function App() {
 
   subscribeToAccelerometer = () => {
     setSubscription(Accelerometer.addListener((accelerometerData) => {
-      setAccelerometerData(accelerometerData);
-      if (database){
+      let firebaseAccelermoterData = {x: accelerometerData.x, y: accelerometerData.y, z: accelerometerData.z, timestamp: Date.now()};
+      setAccelerometerData(firebaseAccelermoterData);
+
+      if (database && (Math.floor(accelerometerData.x + accelerometerData.y + accelerometerData.z) > 0)){ //apply hurdle
         database.ref("testData/" + user.uid).push(accelerometerData);
       }
     }));

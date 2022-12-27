@@ -1,14 +1,15 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import firebase from 'firebase';
 
 // Initialize Firebase
-export const firebaseConfig = {
-    apiKey: '',
-    authDomain: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: '',
-    appId: ''
+const firebaseConfig = {
+  apiKey: "AIzaSyDOnjC0vHckQhWhZOvMhrWvXRmTnSQY0Mc",
+  authDomain: "december-sandbox.firebaseapp.com",
+  databaseURL: "https://december-sandbox-default-rtdb.firebaseio.com",
+  projectId: "december-sandbox",
+  storageBucket: "december-sandbox.appspot.com",
+  messagingSenderId: "775531210491",
+  appId: "1:775531210491:web:fb15f28e7fb0a6545a325e",
+  measurementId: "G-JFNDGTGBX3"
 };
 
 let Firebase;
