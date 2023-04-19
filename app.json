@@ -2,7 +2,7 @@
   "expo": {
     "name": "strategy-in-motion-sandbox",
     "slug": "snack-6bffaa40-607d-4e36-855d-92ac87d05a93",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,16 +18,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.stratinmotion.decsand",
+      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.stratinmotion.decsand"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f7eae1b8-bd81-4e83-bf72-4284ef6ecce0"
+      }
     }
   }
 }
