@@ -21,21 +21,10 @@ const theme = {
 const BACKGROUND_FETCH_TASK = 'background-fetch';
 
 TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
+
+  //this code doesn't get triggered 
+
   const now = Date.now();
-
-  firebase.auth().signInAnonymously().then((userCredential) => {
-    setUser(userCredential.user);
-
-    const fbDatabase = firebase.database();
-    setDatabase(fbDatabase);
-
-    if (database) {
-      database.ref("testDataDevice/" + user.uid).push({ osName: Device.osName, osVersion: Device.osVersion });
-    }
-
-  })
-    .catch((ignored) => {
-    });
 
   //console.log('Background fetch task started at: ${new Date(now).toISOString()}');
   console.log('test');
